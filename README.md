@@ -1,2 +1,4 @@
 # Hangman
-Курсовой проект по ТРПО
+* $ make
+* $ make install
+* $ hangman
