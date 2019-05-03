@@ -5,7 +5,15 @@
 
 #define WINDOW_WIDTH (640)
 #define WINDOW_HEIGHT (480)
-
+#define HELLO 100
+#define LANGUAGE 200
+#define NAME 300
+#define MENU 400
+#define MODERATORS 500
+#define RT 600
+#define PLAY 700
+#define WIN 800
+#define LOSE 900
 /*
 gcc main.c `sdl2-config --libs --cflags` --std=c99 -Wall -lSDL2_image -lm -o
 main
@@ -119,11 +127,18 @@ int main(int argc, char* argv[]) {
         SDL_Quit();
         return 1;
     }
-
     /*
-    SDL_Rect dest1;
-    dest1.w = 140;
-    dest1.h = 320;
+    while (!close_requested) {
+
+      if (poll event) {
+        switch(event){
+          case SDL_QUIT:
+          close_requested = 1;
+          break;
+
+        }
+      }
+    }
     */
     int close_requested = 0;
     int enter = 0;
@@ -131,20 +146,6 @@ int main(int argc, char* argv[]) {
     int left = 1;
     int norm_cur = 0;
     int pos = -1;
-
-    /*
-      while (!close_requested) {
-
-        if (poll event) {
-          switch(event){
-            case SDL_QUIT:
-            close_requested = 1;
-            break;
-
-          }
-        }
-      }
-    */
 
     while (!close_requested) {
         SDL_Event event;
@@ -184,20 +185,6 @@ int main(int argc, char* argv[]) {
                                 break;
                             }
                             break;
-                            /*
-                          case SDL_KEYUP:
-                              switch (eevent.key.keysym.scancode) {
-                              case SDL_SCANCODE_A:
-                              case SDL_SCANCODE_LEFT:
-                                  left = 0;
-                                  break;
-                              case SDL_SCANCODE_D:
-                              case SDL_SCANCODE_RIGHT:
-                                  right = 0;
-                                  break;
-                              }
-                              break;
-                              */
                         }
                     }
                     SDL_RenderClear(rend);
