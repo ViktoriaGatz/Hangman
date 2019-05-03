@@ -1,4 +1,4 @@
-# Hangman
+# Hangman (beta)
 * $ make
 * $ make install
 * $ hangman
