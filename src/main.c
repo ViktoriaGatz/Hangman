@@ -15,6 +15,7 @@
 #define WIN 800
 #define LOSE 900
 #define WAIT_RUS 1000
+#define WAIT 1100
 /*
 gcc main.c `sdl2-config --libs --cflags` --std=c99 -Wall -lSDL2_image -lm -o
 main
@@ -83,6 +84,24 @@ int main(int argc, char* argv[]) {
     SDL_Texture* texture_wait_rus
             = SDL_CreateTextureFromSurface(rend, wait_rus);
     SDL_FreeSurface(wait_rus);
+    if (!texture_wait_rus) {
+        printf("error creating texture: %s\n", SDL_GetError());
+        SDL_DestroyRenderer(rend);
+        SDL_DestroyWindow(win);
+        SDL_Quit();
+        return 1;
+    }
+
+    SDL_Surface* wait = IMG_Load("./draw/wait.bmp");
+    if (!wait) {
+        printf("error creating cursor\n");
+        SDL_DestroyRenderer(rend);
+        SDL_DestroyWindow(win);
+        SDL_Quit();
+        return 1;
+    }
+    SDL_Texture* texture_wait = SDL_CreateTextureFromSurface(rend, wait);
+    SDL_FreeSurface(wait);
     if (!texture_wait_rus) {
         printf("error creating texture: %s\n", SDL_GetError());
         SDL_DestroyRenderer(rend);
@@ -179,6 +198,7 @@ int main(int argc, char* argv[]) {
                         enter = 1;
                     }
                     if (state == LANGUAGE && pos == 1) {
+                        state = WAIT;
                     }
                     if (state == LANGUAGE && pos == 0) {
                         state = WAIT_RUS;
@@ -217,6 +237,12 @@ int main(int argc, char* argv[]) {
             if (state == WAIT_RUS) {
                 SDL_RenderClear(rend);
                 SDL_RenderCopy(rend, texture_wait_rus, NULL, NULL);
+                SDL_RenderPresent(rend);
+                SDL_Delay(1000 / 60);
+            }
+            if (state == WAIT) {
+                SDL_RenderClear(rend);
+                SDL_RenderCopy(rend, texture_wait, NULL, NULL);
                 SDL_RenderPresent(rend);
                 SDL_Delay(1000 / 60);
             }
