@@ -181,7 +181,7 @@ int main(int argc, char* argv[]) {
     int right = 0;
     int left = 1;
     int pos = -1;
-    int state = MENU;
+    int state = HELLO;
     while (!close_requested) {
         SDL_Event event;
         if (SDL_PollEvent(&event)) {
@@ -193,7 +193,7 @@ int main(int argc, char* argv[]) {
                 switch (event.key.keysym.scancode) {
                 case SDL_SCANCODE_KP_ENTER:
                 case SDL_SCANCODE_RETURN:
-                    if (state == MENU) {
+                    if (state == HELLO) {
                         state = 200;
                         enter = 1;
                     }
@@ -215,19 +215,17 @@ int main(int argc, char* argv[]) {
                         right = 1;
                         left = 0;
                         break;
-                    case SDL_SCANCODE_ESCAPE:
-                        switch (state) {
-                        case HELLO:
-                            close_requested = 1;
-                            break;
-                        case LANGUAGE:
-                            state = HELLO;
-                        case WAIT:
-                        case WAIT_RUS:
-                        case NAME:
-                            state = LANGUAGE;
-                            break;
-                        }
+                    }
+                case SDL_SCANCODE_ESCAPE:
+                    switch (state) {
+                    case HELLO:
+                        close_requested = 1;
+                        break;
+                    case WAIT:
+                    case WAIT_RUS:
+                    case NAME:
+                        state = LANGUAGE;
+                        break;
                     }
                 default:
                     break;
@@ -259,7 +257,7 @@ int main(int argc, char* argv[]) {
                 SDL_RenderPresent(rend);
                 SDL_Delay(1000 / 60);
             }
-            if (state == MENU) {
+            if (state == HELLO) {
                 SDL_RenderClear(rend);
                 SDL_RenderCopy(rend, texture_hello, NULL, NULL);
                 SDL_RenderPresent(rend);
