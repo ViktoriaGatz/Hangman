@@ -215,6 +215,19 @@ int main(int argc, char* argv[]) {
                         right = 1;
                         left = 0;
                         break;
+                    case SDL_SCANCODE_ESCAPE:
+                        switch (state) {
+                        case HELLO:
+                            close_requested = 1;
+                            break;
+                        case LANGUAGE:
+                            state = HELLO;
+                        case WAIT:
+                        case WAIT_RUS:
+                        case NAME:
+                            state = LANGUAGE;
+                            break;
+                        }
                     }
                 default:
                     break;
