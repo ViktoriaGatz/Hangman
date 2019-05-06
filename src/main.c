@@ -1,49 +1,13 @@
+#include "function.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_timer.h>
 #include <stdio.h>
 
-#define WINDOW_WIDTH (640)
-#define WINDOW_HEIGHT (480)
-#define HELLO 100
-#define LANGUAGE 200
-#define NAME 300
-#define MENU 400
-#define MODERATORS 500
-#define RT 600
-#define PLAY 700
-#define WIN 800
-#define LOSE 900
-#define WAIT_RUS 1000
-#define WAIT 1100
 /*
 gcc main.c `sdl2-config --libs --cflags` --std=c99 -Wall -lSDL2_image -lm -o
 main
 */
-
-/*
-if (x_pos >= WINDOW_WIDTH - dest.w) x_pos = WINDOW_WIDTH - dest.w;
-if (y_pos >= WINDOW_HEIGHT - dest.h) y_pos = WINDOW_HEIGHT - dest.h;
-dest.y = (int) y_pos;
-dest.x = (int) x_pos;
-*/
-void ApplySurface(int x, int y, SDL_Texture* tex, SDL_Renderer* rend) {
-    SDL_Rect dest;
-    SDL_QueryTexture(tex, NULL, NULL, &dest.w, &dest.h);
-    dest.w /= 10;
-    dest.h /= 8;
-    dest.x = x;
-    dest.y = y;
-    SDL_RenderCopy(rend, tex, NULL, &dest);
-}
-
-void Cur_lang(
-        int right, int left, SDL_Texture* texture_cursor, SDL_Window* win) {
-    if (right == 1 && left == 0) {
-    }
-    if (right == 0 && left == 1) {
-    }
-}
 
 int main(int argc, char* argv[]) {
     if (SDL_Init(SDL_INIT_AUDIO | SDL_INIT_VIDEO) < 0) {
@@ -253,11 +217,11 @@ int main(int argc, char* argv[]) {
                 SDL_RenderClear(rend);
                 SDL_RenderCopy(rend, texture_lang, NULL, NULL);
                 if (left == 1 && right == 0) {
-                    ApplySurface(140, 320, texture_cursor, rend);
+                    ApplySurface(140, 320, 64, 64, texture_cursor, rend);
                     pos = 0;
                 }
                 if (left == 0 && right == 1) {
-                    ApplySurface(360, 320, texture_cursor, rend);
+                    ApplySurface(360, 320, 64, 64, texture_cursor, rend);
                     pos = 1;
                 }
                 SDL_RenderPresent(rend);
@@ -270,6 +234,8 @@ int main(int argc, char* argv[]) {
                 SDL_Delay(1000 / 60);
             }
             if (state == NAME) {
+                state = (Enter_name(texture_name, win, rend) == 0) ? MENU
+                                                                   : NAME;
                 SDL_RenderClear(rend);
                 SDL_RenderCopy(rend, texture_name, NULL, NULL);
                 SDL_RenderPresent(rend);
