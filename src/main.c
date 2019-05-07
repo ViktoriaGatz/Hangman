@@ -1,4 +1,5 @@
-#include "function.h"
+#include "names.h"
+#include "play.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_timer.h>
@@ -128,6 +129,24 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
+    SDL_Surface* play = IMG_Load("./draw/play.bmp");
+    if (!play) {
+        printf("error creating play\n");
+        SDL_DestroyRenderer(rend);
+        SDL_DestroyWindow(win);
+        SDL_Quit();
+        return 1;
+    }
+    SDL_Texture* texture_play = SDL_CreateTextureFromSurface(rend, play);
+    SDL_FreeSurface(play);
+    if (!texture_play) {
+        printf("error creating texture: %s\n", SDL_GetError());
+        SDL_DestroyRenderer(rend);
+        SDL_DestroyWindow(win);
+        SDL_Quit();
+        return 1;
+    }
+
     SDL_Surface* cursor = IMG_Load("./draw/cursor.bmp");
     if (!cursor) {
         printf("error creating cursor\n");
@@ -228,19 +247,21 @@ int main(int argc, char* argv[]) {
                 SDL_Delay(1000 / 60);
             }
             if (state == WAIT_RUS) {
-                SDL_RenderClear(rend);
-                SDL_RenderCopy(rend, texture_wait_rus, NULL, NULL);
-                SDL_RenderPresent(rend);
-                SDL_Delay(1000 / 60);
+                close_requested = 1;
             }
             if (state == NAME) {
-                state = (Enter_name(texture_name, win, rend) == 0) ? MENU
+                state = (Enter_name(texture_name, win, rend) == 0) ? PLAY
                                                                    : NAME;
+            }
+
+            if (state == PLAY) {
                 SDL_RenderClear(rend);
-                SDL_RenderCopy(rend, texture_name, NULL, NULL);
+                SDL_RenderCopy(rend, texture_play, NULL, NULL);
                 SDL_RenderPresent(rend);
                 SDL_Delay(1000 / 60);
+                Play_Process(texture_play, win, rend);
             }
+
             if (state == WAIT) {
                 SDL_RenderClear(rend);
                 SDL_RenderCopy(rend, texture_wait, NULL, NULL);

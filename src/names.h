@@ -1,10 +1,9 @@
-#ifndef FUNCTION_H
-#define FUNCTION_H
+#ifndef NAMES_H
+#define NAMES_H
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_timer.h>
-#include <stdio.h>
 
 #define WINDOW_WIDTH 640
 #define WINDOW_HEIGHT 480

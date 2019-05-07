@@ -13,23 +13,23 @@ OBJ_DIR := ./obj
 
 all: $(BIN_DIR)/hangman
 
-$(BIN_DIR)/hangman: $(OBJ_DIR)/main.o $(OBJ_DIR)/function.o
-	$(CC) $(OBJ_DIR)/main.o $(OBJ_DIR)/function.o $(FLAGS) $(LIBS) -o $(BIN_DIR)/hangman $(SDL2)
+$(BIN_DIR)/hangman: $(OBJ_DIR)/main.o $(OBJ_DIR)/names.o $(OBJ_DIR)/play.o
+	$(CC) $(OBJ_DIR)/main.o $(OBJ_DIR)/names.o $(OBJ_DIR)/play.o $(FLAGS) $(LIBS) -o $(BIN_DIR)/hangman $(SDL2)
 
 $(OBJ_DIR)/main.o: $(SRC_DIR)/main.c
 	$(CC) -c $(SRC_DIR)/main.c -o $(OBJ_DIR)/main.o $(FLAGS) $(LIBS)
 
-#$(BIN_DIR)/hangman:  $(OBJ_DIR)/main.o  $(OBJ_DIR)/hangman.o  $(OBJ_DIR)/function.o
-#	$(CC) $(OBJ_DIR)/main.o  $(OBJ_DIR)/hangman.o  $(OBJ_DIR)/function.o -o $(BIN_DIR)/hangman $(FLAGS) $(LIBS)
+#$(BIN_DIR)/hangman:  $(OBJ_DIR)/main.o  $(OBJ_DIR)/hangman.o  $(OBJ_DIR)/names.o
+#	$(CC) $(OBJ_DIR)/main.o  $(OBJ_DIR)/hangman.o  $(OBJ_DIR)/names.o -o $(BIN_DIR)/hangman $(FLAGS) $(LIBS)
 
 #$(OBJ_DIR)/main.o: $(SRC_DIR)/main.c
 #	$(CC) -c $(SRC_DIR)/main.c -o  $(OBJ_DIR)/main.o $(FLAGS) $(LIBS)
 
-#$(OBJ_DIR)/hangman.o: $(SRC_DIR)/hangman.c
-#	$(CC) -c $(SRC_DIR)/hangman.c -o $(OBJ_DIR)/hangman.o $(FLAGS) $(LIBS)
+$(OBJ_DIR)/play.o: $(SRC_DIR)/play.c
+	$(CC) -c $(SRC_DIR)/play.c -o $(OBJ_DIR)/play.o $(FLAGS) $(LIBS)
 
-$(OBJ_DIR)/function.o: $(SRC_DIR)/function.c
-	$(CC) -c $(SRC_DIR)/function.c -o $(OBJ_DIR)/function.o $(FLAGS) $(LIBS)
+$(OBJ_DIR)/names.o: $(SRC_DIR)/names.c
+	$(CC) -c $(SRC_DIR)/names.c -o $(OBJ_DIR)/names.o $(FLAGS) $(LIBS)
 
 clean:
 	find -name "*.o" -exec rm -rf {} +
