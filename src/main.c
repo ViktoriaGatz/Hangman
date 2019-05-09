@@ -5,10 +5,9 @@
 #include <SDL2/SDL_timer.h>
 #include <stdio.h>
 
-/*
-gcc main.c `sdl2-config --libs --cflags` --std=c99 -Wall -lSDL2_image -lm -o
-main
-*/
+/* clang-format off */
+// gcc main.c `sdl2 - config-- libs-- cflags` --std = c99 - Wall - lSDL2_image - lm- o main
+/* clang-format on */
 
 int main(int argc, char* argv[]) {
     if (SDL_Init(SDL_INIT_AUDIO | SDL_INIT_VIDEO) < 0) {
@@ -164,6 +163,57 @@ int main(int argc, char* argv[]) {
         SDL_Quit();
         return 1;
     }
+    SDL_Surface* lose = IMG_Load("./draw/lose.bmp");
+    if (!lose) {
+        printf("error creating lose\n");
+        SDL_DestroyRenderer(rend);
+        SDL_DestroyWindow(win);
+        SDL_Quit();
+        return 1;
+    }
+    SDL_Texture* texture_lose = SDL_CreateTextureFromSurface(rend, lose);
+    SDL_FreeSurface(lose);
+    if (!texture_lose) {
+        printf("error creating texture: %s\n", SDL_GetError());
+        SDL_DestroyRenderer(rend);
+        SDL_DestroyWindow(win);
+        SDL_Quit();
+        return 1;
+    }
+    SDL_Surface* winn = IMG_Load("./draw/win.bmp");
+    if (!winn) {
+        printf("error creating win\n");
+        SDL_DestroyRenderer(rend);
+        SDL_DestroyWindow(win);
+        SDL_Quit();
+        return 1;
+    }
+    SDL_Texture* texture_win = SDL_CreateTextureFromSurface(rend, winn);
+    SDL_FreeSurface(winn);
+    if (!texture_win) {
+        printf("error creating texture: %s\n", SDL_GetError());
+        SDL_DestroyRenderer(rend);
+        SDL_DestroyWindow(win);
+        SDL_Quit();
+        return 1;
+    }
+    SDL_Surface* rot = IMG_Load("./draw/tor.bmp");
+    if (!rot) {
+        printf("error creating rot\n");
+        SDL_DestroyRenderer(rend);
+        SDL_DestroyWindow(win);
+        SDL_Quit();
+        return 1;
+    }
+    SDL_Texture* texture_rot = SDL_CreateTextureFromSurface(rend, rot);
+    SDL_FreeSurface(rot);
+    if (!texture_rot) {
+        printf("error creating texture: %s\n", SDL_GetError());
+        SDL_DestroyRenderer(rend);
+        SDL_DestroyWindow(win);
+        SDL_Quit();
+        return 1;
+    }
     /*
     while (!close_requested) {
 
@@ -177,12 +227,15 @@ int main(int argc, char* argv[]) {
       }
     }
     */
+    char* string = "./vocabulary/enimals.txt";
+    word_t word = {.w = 40, .h = 50};
     int close_requested = 0;
     int enter = 0;
     int right = 0;
     int left = 1;
     int pos = -1;
     int state = HELLO;
+    int del = -1;
     while (!close_requested) {
         SDL_Event event;
         if (SDL_PollEvent(&event)) {
@@ -194,6 +247,9 @@ int main(int argc, char* argv[]) {
                 switch (event.key.keysym.scancode) {
                 case SDL_SCANCODE_KP_ENTER:
                 case SDL_SCANCODE_RETURN:
+                    if (state == WIN || state == LOSE) {
+                        state == ROT;
+                    }
                     if (state == HELLO) {
                         state = 200;
                         enter = 1;
@@ -225,6 +281,7 @@ int main(int argc, char* argv[]) {
                     case WAIT:
                     case WAIT_RUS:
                     case NAME:
+                    case ROT:
                         state = LANGUAGE;
                         break;
                     }
@@ -259,9 +316,13 @@ int main(int argc, char* argv[]) {
                 SDL_RenderCopy(rend, texture_play, NULL, NULL);
                 SDL_RenderPresent(rend);
                 SDL_Delay(1000 / 60);
-                Play_Process(texture_play, win, rend);
+                del = Play_Process(texture_play, win, rend);
+                if (del == 0) {
+                    state = WIN;
+                } else if (del == 2) {
+                    state = LOSE;
+                }
             }
-
             if (state == WAIT) {
                 SDL_RenderClear(rend);
                 SDL_RenderCopy(rend, texture_wait, NULL, NULL);
@@ -271,6 +332,24 @@ int main(int argc, char* argv[]) {
             if (state == HELLO) {
                 SDL_RenderClear(rend);
                 SDL_RenderCopy(rend, texture_hello, NULL, NULL);
+                SDL_RenderPresent(rend);
+                SDL_Delay(1000 / 60);
+            }
+            if (state == WIN) {
+                SDL_RenderClear(rend);
+                SDL_RenderCopy(rend, texture_win, NULL, NULL);
+                SDL_RenderPresent(rend);
+                SDL_Delay(1000 / 60);
+            }
+            if (state == LOSE) {
+                SDL_RenderClear(rend);
+                SDL_RenderCopy(rend, texture_lose, NULL, NULL);
+                SDL_RenderPresent(rend);
+                SDL_Delay(1000 / 60);
+            }
+            if (state == ROT) {
+                SDL_RenderClear(rend);
+                SDL_RenderCopy(rend, texture_rot, NULL, NULL);
                 SDL_RenderPresent(rend);
                 SDL_Delay(1000 / 60);
             }
