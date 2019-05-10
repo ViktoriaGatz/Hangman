@@ -18,9 +18,10 @@
 #define LOSE 900
 #define WAIT_RUS 1000
 #define WAIT 1100
+#define SELECT 1200
 
 void ApplySurface(
         int x, int y, int w, int h, SDL_Texture* tex, SDL_Renderer* rend);
 int Enter_name(SDL_Texture* texture_name, SDL_Window* win, SDL_Renderer* rend);
-//деректива препроцессора
+// The preprocessor directive
 #endif

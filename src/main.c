@@ -5,10 +5,9 @@
 #include <SDL2/SDL_timer.h>
 #include <stdio.h>
 
-/*
-gcc main.c `sdl2-config --libs --cflags` --std=c99 -Wall -lSDL2_image -lm -o
-main
-*/
+/* clang-format off */
+// gcc main.c `sdl2 - config-- libs-- cflags` --std = c99 - Wall - lSDL2_image - lm- o main
+/* clang-format on */
 
 int main(int argc, char* argv[]) {
     if (SDL_Init(SDL_INIT_AUDIO | SDL_INIT_VIDEO) < 0) {
@@ -38,132 +37,48 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
-    SDL_Surface* name = IMG_Load("./draw/name.bmp");
-    if (!name) {
-        printf("error creating cursor\n");
-        SDL_DestroyRenderer(rend);
-        SDL_DestroyWindow(win);
-        SDL_Quit();
-        return 1;
+    char** draw_ = (char**)malloc(sizeof(char[15][256]));
+
+    draw_[0] = "./draw/tor.bmp";
+    draw_[1] = "./draw/name.bmp";
+    draw_[2] = "./draw/wait_rus.bmp";
+    draw_[3] = "./draw/wait.bmp";
+    draw_[4] = "./draw/hello.bmp";
+    draw_[5] = "./draw/language.bmp";
+    draw_[6] = "./draw/play.bmp";
+    draw_[7] = "./draw/cursor.bmp";
+    draw_[8] = "./draw/lose.bmp";
+    draw_[9] = "./draw/win.bmp";
+
+    SDL_Surface** draw = (SDL_Surface**)malloc(sizeof(SDL_Surface*) * 10);
+    if (!draw) {
+        fprintf(stderr, "Error draw\n");
     }
-    SDL_Texture* texture_name = SDL_CreateTextureFromSurface(rend, name);
-    SDL_FreeSurface(name);
-    if (!texture_name) {
-        printf("error creating texture: %s\n", SDL_GetError());
-        SDL_DestroyRenderer(rend);
-        SDL_DestroyWindow(win);
-        SDL_Quit();
-        return 1;
+    SDL_Texture** t_draw = (SDL_Texture**)malloc(sizeof(SDL_Texture*) * 10);
+    if (!t_draw) {
+        fprintf(stderr, "Error t_draw\n");
+    }
+    for (int i = 0; i < 10; i++) {
+        draw[i] = IMG_Load((draw_)[i]);
+        if (!(draw[i])) {
+            fprintf(stderr, "Error create %s", draw_[i]);
+            SDL_DestroyRenderer(rend);
+            SDL_DestroyWindow(win);
+            SDL_Quit();
+            return 1;
+        }
+        t_draw[i] = SDL_CreateTextureFromSurface(rend, draw[i]);
+        if (!(t_draw[i])) {
+            fprintf(stderr, "Error creating texture: %s\n", SDL_GetError());
+            SDL_DestroyRenderer(rend);
+            SDL_DestroyWindow(win);
+            SDL_Quit();
+            return 1;
+        }
     }
 
-    SDL_Surface* wait_rus = IMG_Load("./draw/wait_rus.bmp");
-    if (!wait_rus) {
-        printf("error creating cursor\n");
-        SDL_DestroyRenderer(rend);
-        SDL_DestroyWindow(win);
-        SDL_Quit();
-        return 1;
-    }
-    SDL_Texture* texture_wait_rus
-            = SDL_CreateTextureFromSurface(rend, wait_rus);
-    SDL_FreeSurface(wait_rus);
-    if (!texture_wait_rus) {
-        printf("error creating texture: %s\n", SDL_GetError());
-        SDL_DestroyRenderer(rend);
-        SDL_DestroyWindow(win);
-        SDL_Quit();
-        return 1;
-    }
-
-    SDL_Surface* wait = IMG_Load("./draw/wait.bmp");
-    if (!wait) {
-        printf("error creating cursor\n");
-        SDL_DestroyRenderer(rend);
-        SDL_DestroyWindow(win);
-        SDL_Quit();
-        return 1;
-    }
-    SDL_Texture* texture_wait = SDL_CreateTextureFromSurface(rend, wait);
-    SDL_FreeSurface(wait);
-    if (!texture_wait) {
-        printf("error creating texture: %s\n", SDL_GetError());
-        SDL_DestroyRenderer(rend);
-        SDL_DestroyWindow(win);
-        SDL_Quit();
-        return 1;
-    }
-
-    SDL_Surface* hello = IMG_Load("./draw/hello.bmp");
-    if (!hello) {
-        printf("error creating hello\n");
-        SDL_DestroyRenderer(rend);
-        SDL_DestroyWindow(win);
-        SDL_Quit();
-        return 1;
-    }
-    SDL_Texture* texture_hello = SDL_CreateTextureFromSurface(rend, hello);
-    SDL_FreeSurface(hello);
-    if (!texture_hello) {
-        printf("error creating texture: %s\n", SDL_GetError());
-        SDL_DestroyRenderer(rend);
-        SDL_DestroyWindow(win);
-        SDL_Quit();
-        return 1;
-    }
-
-    SDL_Surface* lang = IMG_Load("./draw/language.bmp");
-    if (!lang) {
-        printf("error creating lang\n");
-        SDL_DestroyRenderer(rend);
-        SDL_DestroyWindow(win);
-        SDL_Quit();
-        return 1;
-    }
-    SDL_Texture* texture_lang = SDL_CreateTextureFromSurface(rend, lang);
-    SDL_FreeSurface(lang);
-    if (!texture_lang) {
-        printf("error creating texture: %s\n", SDL_GetError());
-        SDL_DestroyRenderer(rend);
-        SDL_DestroyWindow(win);
-        SDL_Quit();
-        return 1;
-    }
-
-    SDL_Surface* play = IMG_Load("./draw/play.bmp");
-    if (!play) {
-        printf("error creating play\n");
-        SDL_DestroyRenderer(rend);
-        SDL_DestroyWindow(win);
-        SDL_Quit();
-        return 1;
-    }
-    SDL_Texture* texture_play = SDL_CreateTextureFromSurface(rend, play);
-    SDL_FreeSurface(play);
-    if (!texture_play) {
-        printf("error creating texture: %s\n", SDL_GetError());
-        SDL_DestroyRenderer(rend);
-        SDL_DestroyWindow(win);
-        SDL_Quit();
-        return 1;
-    }
-
-    SDL_Surface* cursor = IMG_Load("./draw/cursor.bmp");
-    if (!cursor) {
-        printf("error creating cursor\n");
-        SDL_DestroyRenderer(rend);
-        SDL_DestroyWindow(win);
-        SDL_Quit();
-        return 1;
-    }
-    SDL_Texture* texture_cursor = SDL_CreateTextureFromSurface(rend, cursor);
-    SDL_FreeSurface(cursor);
-    if (!texture_cursor) {
-        printf("error creating texture: %s\n", SDL_GetError());
-        SDL_DestroyRenderer(rend);
-        SDL_DestroyWindow(win);
-        SDL_Quit();
-        return 1;
-    }
+    free(draw_);
+    SDL_FreeSurface(*draw);
     /*
     while (!close_requested) {
 
@@ -183,6 +98,7 @@ int main(int argc, char* argv[]) {
     int left = 1;
     int pos = -1;
     int state = HELLO;
+    int del = -1;
     while (!close_requested) {
         SDL_Event event;
         if (SDL_PollEvent(&event)) {
@@ -194,6 +110,9 @@ int main(int argc, char* argv[]) {
                 switch (event.key.keysym.scancode) {
                 case SDL_SCANCODE_KP_ENTER:
                 case SDL_SCANCODE_RETURN:
+                    if (state == WIN || state == LOSE) {
+                        state = PLAY;
+                    }
                     if (state == HELLO) {
                         state = 200;
                         enter = 1;
@@ -220,11 +139,14 @@ int main(int argc, char* argv[]) {
                 case SDL_SCANCODE_ESCAPE:
                     switch (state) {
                     case HELLO:
+                    case LOSE:
+                    case WIN:
                         close_requested = 1;
                         break;
                     case WAIT:
                     case WAIT_RUS:
                     case NAME:
+                    case ROT:
                         state = LANGUAGE;
                         break;
                     }
@@ -234,13 +156,13 @@ int main(int argc, char* argv[]) {
             }
             if (state == LANGUAGE) {
                 SDL_RenderClear(rend);
-                SDL_RenderCopy(rend, texture_lang, NULL, NULL);
+                SDL_RenderCopy(rend, t_draw[5], NULL, NULL);
                 if (left == 1 && right == 0) {
-                    ApplySurface(140, 320, 64, 64, texture_cursor, rend);
+                    ApplySurface(140, 320, 64, 64, t_draw[7], rend);
                     pos = 0;
                 }
                 if (left == 0 && right == 1) {
-                    ApplySurface(360, 320, 64, 64, texture_cursor, rend);
+                    ApplySurface(360, 320, 64, 64, t_draw[7], rend);
                     pos = 1;
                 }
                 SDL_RenderPresent(rend);
@@ -250,33 +172,55 @@ int main(int argc, char* argv[]) {
                 close_requested = 1;
             }
             if (state == NAME) {
-                state = (Enter_name(texture_name, win, rend) == 0) ? PLAY
-                                                                   : NAME;
+                state = (Enter_name(t_draw[1], win, rend) == 0) ? PLAY : NAME;
             }
 
             if (state == PLAY) {
                 SDL_RenderClear(rend);
-                SDL_RenderCopy(rend, texture_play, NULL, NULL);
+                SDL_RenderCopy(rend, t_draw[6], NULL, NULL);
                 SDL_RenderPresent(rend);
                 SDL_Delay(1000 / 60);
-                Play_Process(texture_play, win, rend);
+                del = Play_Process(t_draw[6], win, rend);
+                if (del == 0) {
+                    state = WIN;
+                } else if (del == 2) {
+                    state = LOSE;
+                } else if (del == 1) {
+                    close_requested = 1;
+                }
             }
-
             if (state == WAIT) {
                 SDL_RenderClear(rend);
-                SDL_RenderCopy(rend, texture_wait, NULL, NULL);
+                SDL_RenderCopy(rend, t_draw[3], NULL, NULL);
                 SDL_RenderPresent(rend);
                 SDL_Delay(1000 / 60);
             }
             if (state == HELLO) {
                 SDL_RenderClear(rend);
-                SDL_RenderCopy(rend, texture_hello, NULL, NULL);
+                SDL_RenderCopy(rend, t_draw[4], NULL, NULL);
                 SDL_RenderPresent(rend);
                 SDL_Delay(1000 / 60);
             }
+            if (state == WIN) {
+                ApplySurface(20, 180, 600, 150, t_draw[9], rend);
+                SDL_RenderPresent(rend);
+                SDL_Delay(1000 / 60);
+            }
+            if (state == LOSE) {
+                ApplySurface(20, 180, 600, 150, t_draw[8], rend);
+                SDL_RenderPresent(rend);
+                SDL_Delay(1000 / 60);
+            }
+            if (state == ROT) {
+                SDL_RenderClear(rend);
+                SDL_RenderCopy(rend, t_draw[0], NULL, NULL);
+                SDL_RenderPresent(rend);
+                SDL_Delay(1000 / 60);
+            }
+            if (state == SELECT) {
+            }
         }
     }
-
     printf("Done\n");
     atexit(SDL_Quit);
 }
