@@ -45,6 +45,7 @@ int Enter_name(SDL_Texture* texture_name, SDL_Window* win, SDL_Renderer* rend) {
                 case SDL_SCANCODE_RETURN:
                     if (i > 100) {
                         user_name[(i - 100) / 60] = '\0';
+                        fprintf(RT, "%s\n", user_name);
                         return 0;
                     } else
                         continue;
