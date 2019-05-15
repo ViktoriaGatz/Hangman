@@ -5,7 +5,7 @@
 #include <SDL2/SDL_timer.h>
 #include <stdio.h>
 
-int Enter_name(SDL_Texture* texture_name, SDL_Window* win, SDL_Renderer* rend) {
+int Enter_name(SDL_Texture* texture_name, SDL_Renderer* rend) {
     FILE* RT;
     RT = fopen("./log/table_of_records.dat", "a+b");
     if (!RT) {

@@ -9,7 +9,7 @@
 // gcc ./src/play.c `sdl2-config --libs --cflags` -std=c99 -lSDL2_image -lm -o main`
 /* clang-format on */
 
-int main(int argc, char* argv[]) {
+int main() {
     if (SDL_Init(SDL_INIT_AUDIO | SDL_INIT_VIDEO) < 0) {
         fprintf(stderr, "Not initialized SDL: %s\n", SDL_GetError());
         exit(1);
@@ -130,18 +130,20 @@ int main(int argc, char* argv[]) {
                         close_requested = 1;
                     }
                     break;
+                case SDL_SCANCODE_A:
+                case SDL_SCANCODE_LEFT:
                     if (state == MENU) {
-                    case SDL_SCANCODE_A:
-                    case SDL_SCANCODE_LEFT:
                         left = 1;
                         right = 0;
-                        break;
-                    case SDL_SCANCODE_D:
-                    case SDL_SCANCODE_RIGHT:
+                    }
+                    break;
+                case SDL_SCANCODE_D:
+                case SDL_SCANCODE_RIGHT:
+                    if (state == MENU) {
                         right = 1;
                         left = 0;
-                        break;
                     }
+                    break;
                 case SDL_SCANCODE_ESCAPE:
                     switch (state) {
                     case HELLO:
@@ -151,7 +153,6 @@ int main(int argc, char* argv[]) {
                         close_requested = 1;
                         break;
                     case PLAY:
-                        state = MENU;
                     case NAME:
                         state = MENU;
                         break;
@@ -175,7 +176,7 @@ int main(int argc, char* argv[]) {
                 SDL_Delay(1000 / 60);
             }
             if (state == NAME) {
-                state = (Enter_name(t_draw[1], win, rend) == 0) ? MENU : NAME;
+                state = (Enter_name(t_draw[1], rend) == 0) ? MENU : NAME;
             }
 
             if (state == PLAY) {
@@ -183,7 +184,7 @@ int main(int argc, char* argv[]) {
                 SDL_RenderCopy(rend, t_draw[6], NULL, NULL);
                 SDL_RenderPresent(rend);
                 SDL_Delay(1000 / 60);
-                del = Play_Process(t_draw[6], win, rend);
+                del = Play_Process(t_draw[6], rend);
                 if (del == 0) {
                     state = WIN;
                 } else if (del == 2) {
