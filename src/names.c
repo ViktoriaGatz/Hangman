@@ -1,4 +1,5 @@
 #include "names.h"
+#include "play.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_timer.h>
@@ -82,15 +83,4 @@ int Enter_name(SDL_Texture* texture_name, SDL_Window* win, SDL_Renderer* rend) {
     }
     fclose(RT);
     return 0;
-}
-
-void ApplySurface(
-        int x, int y, int w, int h, SDL_Texture* tex, SDL_Renderer* rend) {
-    SDL_Rect dest;
-    SDL_QueryTexture(tex, NULL, NULL, &dest.w, &dest.h);
-    dest.w = w;
-    dest.h = h;
-    dest.x = x;
-    dest.y = y;
-    SDL_RenderCopy(rend, tex, NULL, &dest);
 }

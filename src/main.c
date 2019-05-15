@@ -6,7 +6,7 @@
 #include <stdio.h>
 
 /* clang-format off */
-// gcc main.c `sdl2 - config-- libs-- cflags` --std = c99 - Wall - lSDL2_image - lm- o main
+// gcc ./src/play.c `sdl2-config --libs --cflags` -std=c99 -lSDL2_image -lm -o main`
 /* clang-format on */
 
 int main(int argc, char* argv[]) {
@@ -93,7 +93,6 @@ int main(int argc, char* argv[]) {
     }
     */
     int close_requested = 0;
-    int enter = 0;
     int right = 0;
     int left = 1;
     int pos = -1;
@@ -102,10 +101,18 @@ int main(int argc, char* argv[]) {
     while (!close_requested) {
         SDL_Event event;
         if (SDL_PollEvent(&event)) {
+            /*
+            int mouse_x, mouse_y;
+            int buttons = SDL_GetMouseState(&mouse_x, &mouse_y);
+            if (buttons & SDL_BUTTON(SDL_BUTTON_LEFT)) {
+                close_requested = 1;
+            }
+            */
             switch (event.type) {
             case SDL_QUIT:
                 close_requested = 1;
                 break;
+
             case SDL_KEYDOWN:
                 switch (event.key.keysym.scancode) {
                 case SDL_SCANCODE_KP_ENTER:
@@ -114,17 +121,16 @@ int main(int argc, char* argv[]) {
                         state = PLAY;
                     }
                     if (state == HELLO) {
-                        state = 200;
-                        enter = 1;
-                    }
-                    if (state == LANGUAGE && pos == 1) {
                         state = NAME;
                     }
-                    if (state == LANGUAGE && pos == 0) {
-                        state = WAIT_RUS;
+                    if (state == MENU && pos == 1) {
+                        state = PLAY;
+                    }
+                    if (state == MENU && pos == 0) {
+                        close_requested = 1;
                     }
                     break;
-                    if (state == LANGUAGE && enter == 1) {
+                    if (state == MENU) {
                     case SDL_SCANCODE_A:
                     case SDL_SCANCODE_LEFT:
                         left = 1;
@@ -141,20 +147,20 @@ int main(int argc, char* argv[]) {
                     case HELLO:
                     case LOSE:
                     case WIN:
+                    case MENU:
                         close_requested = 1;
                         break;
-                    case WAIT:
-                    case WAIT_RUS:
+                    case PLAY:
+                        state = MENU;
                     case NAME:
-                    case ROT:
-                        state = LANGUAGE;
+                        state = MENU;
                         break;
                     }
                 default:
                     break;
                 }
             }
-            if (state == LANGUAGE) {
+            if (state == MENU) {
                 SDL_RenderClear(rend);
                 SDL_RenderCopy(rend, t_draw[5], NULL, NULL);
                 if (left == 1 && right == 0) {
@@ -168,11 +174,8 @@ int main(int argc, char* argv[]) {
                 SDL_RenderPresent(rend);
                 SDL_Delay(1000 / 60);
             }
-            if (state == WAIT_RUS) {
-                close_requested = 1;
-            }
             if (state == NAME) {
-                state = (Enter_name(t_draw[1], win, rend) == 0) ? PLAY : NAME;
+                state = (Enter_name(t_draw[1], win, rend) == 0) ? MENU : NAME;
             }
 
             if (state == PLAY) {
@@ -188,12 +191,6 @@ int main(int argc, char* argv[]) {
                 } else if (del == 1) {
                     close_requested = 1;
                 }
-            }
-            if (state == WAIT) {
-                SDL_RenderClear(rend);
-                SDL_RenderCopy(rend, t_draw[3], NULL, NULL);
-                SDL_RenderPresent(rend);
-                SDL_Delay(1000 / 60);
             }
             if (state == HELLO) {
                 SDL_RenderClear(rend);
@@ -211,16 +208,9 @@ int main(int argc, char* argv[]) {
                 SDL_RenderPresent(rend);
                 SDL_Delay(1000 / 60);
             }
-            if (state == ROT) {
-                SDL_RenderClear(rend);
-                SDL_RenderCopy(rend, t_draw[0], NULL, NULL);
-                SDL_RenderPresent(rend);
-                SDL_Delay(1000 / 60);
-            }
-            if (state == SELECT) {
-            }
         }
     }
-    printf("Done\n");
+    SDL_DestroyRenderer(rend);
+    SDL_DestroyWindow(win);
     atexit(SDL_Quit);
 }
