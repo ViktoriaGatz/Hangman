@@ -346,4 +346,3 @@ CTEST(word_to_int, return_if_NULL_4) {
 
     ASSERT_EQUAL(exp, real);
 }
-// ASSERT_DATA_INT(exp, 7, word.str, word.size);

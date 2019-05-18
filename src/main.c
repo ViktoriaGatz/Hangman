@@ -4,6 +4,8 @@
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_timer.h>
 #include <stdio.h>
+#define WINDOW_WIDTH 640
+#define WINDOW_HEIGHT 480
 
 /* clang-format off */
 // gcc ./src/play.c `sdl2-config --libs --cflags` -std=c99 -lSDL2_image -lm -o main`

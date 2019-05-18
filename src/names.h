@@ -4,8 +4,6 @@
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_timer.h>
 
-#define WINDOW_WIDTH 640
-#define WINDOW_HEIGHT 480
 #define HELLO 100
 #define NAME 300
 #define MENU 400
