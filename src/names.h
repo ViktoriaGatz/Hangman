@@ -13,6 +13,6 @@
 #define WIN 800
 #define LOSE 900
 
-int Enter_name(SDL_Texture* texture_name, SDL_Window* win, SDL_Renderer* rend);
+int Enter_name(SDL_Texture* texture_name, SDL_Renderer* rend);
 // The preprocessor directive
 #endif

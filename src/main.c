@@ -175,7 +175,7 @@ int main(int argc, char* argv[]) {
                 SDL_Delay(1000 / 60);
             }
             if (state == NAME) {
-                state = (Enter_name(t_draw[1], win, rend) == 0) ? MENU : NAME;
+                state = (Enter_name(t_draw[1], rend) == 0) ? MENU : NAME;
             }
 
             if (state == PLAY) {
