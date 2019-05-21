@@ -21,7 +21,8 @@ void Draw_Word(
         word_t* word,
         SDL_Texture* texture_play,
         SDL_Window* win,
-        SDL_Renderer* rend);
+        SDL_Renderer* rend,
+        int c);
 int Check_Win(unsigned int size, int* check);
 void ApplySurface(
         int x, int y, int w, int h, SDL_Texture* tex, SDL_Renderer* rend);
