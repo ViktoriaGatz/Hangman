@@ -5,7 +5,7 @@
 #include <SDL2/SDL_timer.h>
 #include <stdio.h>
 
-int Enter_name(SDL_Texture* texture_name, SDL_Window* win, SDL_Renderer* rend) {
+int Enter_name(SDL_Texture* texture_name, SDL_Renderer* rend) {
     FILE* RT;
     RT = fopen("./log/table_of_records.dat", "a+b");
     if (!RT) {
@@ -45,13 +45,13 @@ int Enter_name(SDL_Texture* texture_name, SDL_Window* win, SDL_Renderer* rend) {
                 case SDL_SCANCODE_KP_ENTER:
                 case SDL_SCANCODE_RETURN:
                     if (i > 100) {
-                        user_name[(i - 100) / 60] = '\0';
+                        user_name[(i - 100) / 40] = '\0';
                         fprintf(RT, "%s\n", user_name);
                         return 0;
                     } else
                         continue;
                 case SDL_SCANCODE_BACKSPACE:
-                    i = (i == 100) ? 100 : i - 60;
+                    i = (i == 100) ? 100 : i - 40;
                     ApplySurface(i, 240, 40, 50, texture_clear, rend);
                     SDL_RenderPresent(rend);
                     SDL_Delay(1000 / 60);
@@ -68,11 +68,11 @@ int Enter_name(SDL_Texture* texture_name, SDL_Window* win, SDL_Renderer* rend) {
                                 50,
                                 t_eng[event.key.keysym.scancode - 4],
                                 rend);
-                        user_name[(i - 100) / 60]
+                        user_name[(i - 100) / 40]
                                 = 'a' + event.key.keysym.scancode - 4;
                         SDL_RenderPresent(rend);
                         SDL_Delay(1000 / 60);
-                        i += 60;
+                        i += 40;
                     }
                     break;
                 }
