@@ -4,6 +4,8 @@
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_timer.h>
 #include <stdio.h>
+#define WINDOW_WIDTH 640
+#define WINDOW_HEIGHT 480
 
 /* clang-format off */
 // gcc ./src/play.c `sdl2-config --libs --cflags` -std=c99 -lSDL2_image -lm -o main`
@@ -130,18 +132,20 @@ int main() {
                         close_requested = 1;
                     }
                     break;
+                case SDL_SCANCODE_A:
+                case SDL_SCANCODE_LEFT:
                     if (state == MENU) {
-                    case SDL_SCANCODE_A:
-                    case SDL_SCANCODE_LEFT:
                         left = 1;
                         right = 0;
-                        break;
-                    case SDL_SCANCODE_D:
-                    case SDL_SCANCODE_RIGHT:
+                    }
+                    break;
+                case SDL_SCANCODE_D:
+                case SDL_SCANCODE_RIGHT:
+                    if (state == MENU) {
                         right = 1;
                         left = 0;
-                        break;
                     }
+                    break;
                 case SDL_SCANCODE_ESCAPE:
                     switch (state) {
                     case HELLO:

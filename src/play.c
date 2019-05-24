@@ -18,7 +18,7 @@ int Play_Process(SDL_Texture* texture_play, SDL_Renderer* rend) {
     SDL_Texture** t_gallows = (SDL_Texture**)malloc(sizeof(SDL_Texture*) * 7);
 
     char pwd_1[256] = "./draw/gallows/0.bmp";
-    for (int i = 0; i < 7; i++) {
+    for (unsigned int i = 0; i < 7; i++) {
         gallows[i] = IMG_Load(pwd_1);
         t_gallows[i] = SDL_CreateTextureFromSurface(rend, gallows[i]);
         pwd_1[15] = '1' + i;
@@ -110,8 +110,8 @@ int Get_Word(unsigned int* size, char* string) {
         return -1;
     }
     srand(time(NULL));
-    int n = rand() % N;
-    for (int i = 0; i <= n; i++) {
+    unsigned int n = rand() % N;
+    for (unsigned int i = 0; i <= n; i++) {
         fscanf(myfile, "%s\n", string);
         (*size) = strlen(string);
     }
@@ -188,7 +188,7 @@ void Draw_Word(word_t* word, SDL_Renderer* rend) {
     SDL_Texture** t_eng = (SDL_Texture**)malloc(sizeof(SDL_Texture*) * 26);
 
     char pwd[256] = "./draw/eng/a.bmp";
-    for (int i = 0; i < 26; i++) {
+    for (unsigned int i = 0; i < 26; i++) {
         eng_lit[i] = IMG_Load(pwd);
         t_eng[i] = SDL_CreateTextureFromSurface(rend, eng_lit[i]);
         pwd[11] = 'b' + i;
@@ -198,25 +198,11 @@ void Draw_Word(word_t* word, SDL_Renderer* rend) {
     t_eng[26] = SDL_CreateTextureFromSurface(rend, clear);
     SDL_FreeSurface(clear);
     unsigned int i = 0;
-    /*
-    if (c == 0) {
-        // printf("lol\n");
-        printf("%d\n", word->size);
-        printf("%s\n", word->string);
-        while (i < word->size) {
-            printf("%d\n", word->str[i]);
-            ApplySurface(
-                    (i * 40) + 260, 50, 40, 50, t_eng[word->str[i] - 1], rend);
-            i++;
-        }
-    } else {
-        */
     while (i < word->size) {
         ApplySurface(
                 (i * 40) + 260, 50, 40, 50, t_eng[word->check[i] - 1], rend);
         i++;
     }
-    // }
 }
 
 void ApplySurface(
