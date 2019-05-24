@@ -9,7 +9,7 @@
 // gcc ./src/play.c `sdl2-config --libs --cflags` -std=c99 -lSDL2_image -lm -o main`
 /* clang-format on */
 
-int main(int argc, char* argv[]) {
+int main() {
     if (SDL_Init(SDL_INIT_AUDIO | SDL_INIT_VIDEO) < 0) {
         fprintf(stderr, "Not initialized SDL: %s\n", SDL_GetError());
         exit(1);
@@ -145,13 +145,12 @@ int main(int argc, char* argv[]) {
                 case SDL_SCANCODE_ESCAPE:
                     switch (state) {
                     case HELLO:
-                    case LOSE:
-                    case WIN:
-                    case MENU:
                         close_requested = 1;
                         break;
+                    case MENU:
+                    case LOSE:
+                    case WIN:
                     case PLAY:
-                        state = MENU;
                     case NAME:
                         state = MENU;
                         break;
@@ -183,13 +182,13 @@ int main(int argc, char* argv[]) {
                 SDL_RenderCopy(rend, t_draw[6], NULL, NULL);
                 SDL_RenderPresent(rend);
                 SDL_Delay(1000 / 60);
-                del = Play_Process(t_draw[6], win, rend);
+                del = Play_Process(t_draw[6], rend);
                 if (del == 0) {
                     state = WIN;
                 } else if (del == 2) {
                     state = LOSE;
                 } else if (del == 1) {
-                    close_requested = 1;
+                    state = MENU;
                 }
             }
             if (state == HELLO) {

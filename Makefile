@@ -1,4 +1,4 @@
-CC := gcc -Wall
+CC := gcc -Wall -Werror
 FLAGS := -std=c99
 LIBS := -lm
 SDL2 := `sdl2-config --libs --cflags` -lSDL2_image
