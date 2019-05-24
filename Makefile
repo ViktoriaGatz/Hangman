@@ -1,4 +1,5 @@
 CC := gcc -Wall -Werror
+C := gcc
 FLAGS := -std=c99
 FLAG := -std=c11
 LIBS := -lm
@@ -39,7 +40,7 @@ $(TEST_OBJ)/main.o: $(TEST_DIR)/main.c
 $(TEST_OBJ)/play.o: $(TEST_DIR)/play.c
 	$(C) -c $(TEST_DIR)/play.c -o $(TEST_OBJ)/play.o $(FLAG)
 
-test_run:
+test_run: all
 	./bin/test
 
 clean:
