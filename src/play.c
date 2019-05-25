@@ -36,7 +36,7 @@ int Play_Process(SDL_Texture* texture_play, SDL_Renderer* rend) {
     SDL_RenderClear(rend);
     SDL_RenderCopy(rend, texture_play, NULL, NULL);
     ApplySurface(20, 20, 200, 225, t_gallows[proc_l], rend);
-    Draw_Word(&word, rend);
+    Draw_Word(&word, rend, 1);
     SDL_RenderPresent(rend);
     SDL_Delay(1000 / 60);
     while (!close_requested) {
@@ -74,13 +74,13 @@ int Play_Process(SDL_Texture* texture_play, SDL_Renderer* rend) {
                             SDL_RenderPresent(rend);
                             SDL_Delay(1000 / 60);
                             if (proc_l == 6) {
-                                Draw_Word(&word, rend);
+                                Draw_Word(&word, rend, 0);
                                 SDL_Delay(1000 / 60);
                                 return 2;
                             }
                             break;
                         } else if (k > 0) {
-                            Draw_Word(&word, rend);
+                            Draw_Word(&word, rend, 1);
                             SDL_RenderPresent(rend);
                             SDL_Delay(1000 / 60);
                         }
@@ -183,7 +183,7 @@ int Check_Win(unsigned int size, int* check) {
     return 1;
 }
 
-void Draw_Word(word_t* word, SDL_Renderer* rend) {
+void Draw_Word(word_t* word, SDL_Renderer* rend, int c) {
     SDL_Surface** eng_lit = (SDL_Surface**)malloc(sizeof(SDL_Surface*) * 26);
     SDL_Texture** t_eng = (SDL_Texture**)malloc(sizeof(SDL_Texture*) * 26);
 
@@ -198,10 +198,24 @@ void Draw_Word(word_t* word, SDL_Renderer* rend) {
     t_eng[26] = SDL_CreateTextureFromSurface(rend, clear);
     SDL_FreeSurface(clear);
     unsigned int i = 0;
-    while (i < word->size) {
-        ApplySurface(
-                (i * 40) + 260, 50, 40, 50, t_eng[word->check[i] - 1], rend);
-        i++;
+    if (c == 0) {
+        while (i < word->size) {
+            Word_to_Int(&word->size, word->str, word->string, word->check);
+            ApplySurface(
+                    (i * 40) + 260, 50, 40, 50, t_eng[word->str[i] - 1], rend);
+            i++;
+        }
+    } else {
+        while (i < word->size) {
+            ApplySurface(
+                    (i * 40) + 260,
+                    50,
+                    40,
+                    50,
+                    t_eng[word->check[i] - 1],
+                    rend);
+            i++;
+        }
     }
 }
 
