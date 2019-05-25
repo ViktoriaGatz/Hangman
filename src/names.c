@@ -21,10 +21,10 @@ int Enter_name(SDL_Texture* texture_name, SDL_Renderer* rend) {
         t_eng[i] = SDL_CreateTextureFromSurface(rend, eng_lit[i]);
         pwd[11] = 'b' + i;
     }
-    SDL_FreeSurface(*eng_lit);
+    free(eng_lit);
     SDL_Surface* clear = IMG_Load("./draw/clear.bmp");
     SDL_Texture* texture_clear = SDL_CreateTextureFromSurface(rend, clear);
-    SDL_FreeSurface(clear);
+    free(clear);
 
     char* user_name = (char*)malloc(sizeof(char) * 20);
     int close_requested = 0;
@@ -81,6 +81,7 @@ int Enter_name(SDL_Texture* texture_name, SDL_Renderer* rend) {
             }
         }
     }
+    free(t_eng);
     fclose(RT);
     return 0;
 }

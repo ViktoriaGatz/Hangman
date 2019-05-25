@@ -23,7 +23,7 @@ int Play_Process(SDL_Texture* texture_play, SDL_Renderer* rend) {
         t_gallows[i] = SDL_CreateTextureFromSurface(rend, gallows[i]);
         pwd_1[15] = '1' + i;
     }
-    SDL_FreeSurface(*gallows);
+    free(gallows);
 
     word_t alphavit;
     for (int j = 0; j < 26; j++) {
@@ -44,6 +44,7 @@ int Play_Process(SDL_Texture* texture_play, SDL_Renderer* rend) {
         check_win = Check_Win(word.size, word.check);
         if (check_win == 1) {
             SDL_Delay(1000 / 60);
+            free(t_gallows);
             return 0;
         }
         if (SDL_PollEvent(&event)) {
@@ -54,6 +55,7 @@ int Play_Process(SDL_Texture* texture_play, SDL_Renderer* rend) {
             case SDL_KEYDOWN:
                 if (event.key.keysym.scancode == SDL_SCANCODE_ESCAPE) {
                     close_requested = 1;
+                    free(t_gallows);
                     return 1;
                 }
                 if (event.key.keysym.scancode >= SDL_SCANCODE_A
@@ -76,6 +78,7 @@ int Play_Process(SDL_Texture* texture_play, SDL_Renderer* rend) {
                             if (proc_l == 6) {
                                 Draw_Word(&word, rend, 0);
                                 SDL_Delay(1000 / 60);
+                                free(t_gallows);
                                 return 2;
                             }
                             break;
@@ -89,6 +92,7 @@ int Play_Process(SDL_Texture* texture_play, SDL_Renderer* rend) {
                                 "Alphavit NULL %s %d\n",
                                 __FILE__,
                                 __LINE__);
+                        free(t_gallows);
                         return -1;
                     } else {
                         break;
@@ -99,6 +103,7 @@ int Play_Process(SDL_Texture* texture_play, SDL_Renderer* rend) {
             }
         }
     }
+    free(t_gallows);
     return 0;
 }
 
@@ -196,7 +201,7 @@ void Draw_Word(word_t* word, SDL_Renderer* rend, int c) {
     SDL_FreeSurface(*eng_lit);
     SDL_Surface* clear = IMG_Load("./draw/clear1.bmp");
     t_eng[26] = SDL_CreateTextureFromSurface(rend, clear);
-    SDL_FreeSurface(clear);
+    free(clear);
     unsigned int i = 0;
     if (c == 0) {
         while (i < word->size) {
