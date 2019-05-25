@@ -80,7 +80,7 @@ int main() {
     }
 
     free(draw_);
-    SDL_FreeSurface(*draw);
+    free(draw);
     /*
     while (!close_requested) {
 
@@ -213,6 +213,7 @@ int main() {
             }
         }
     }
+    free(t_draw);
     SDL_DestroyRenderer(rend);
     SDL_DestroyWindow(win);
     atexit(SDL_Quit);

@@ -16,7 +16,7 @@ int Get_Word(unsigned int* size, char* string);
 int Word_to_Int(unsigned int* size, int* str, char* string, int* check);
 int Check_Litriche(unsigned int size, int* str, int* check, unsigned int c);
 int Check_Alphavit(unsigned int size, int* str, unsigned int c);
-void Draw_Word(word_t* word, SDL_Renderer* rend);
+void Draw_Word(word_t* word, SDL_Renderer* rend, int c);
 int Check_Win(unsigned int size, int* check);
 void ApplySurface(
         int x, int y, int w, int h, SDL_Texture* tex, SDL_Renderer* rend);

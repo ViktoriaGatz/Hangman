@@ -23,7 +23,7 @@ int Play_Process(SDL_Texture* texture_play, SDL_Renderer* rend) {
         t_gallows[i] = SDL_CreateTextureFromSurface(rend, gallows[i]);
         pwd_1[15] = '1' + i;
     }
-    SDL_FreeSurface(*gallows);
+    free(gallows);
 
     word_t alphavit;
     for (int j = 0; j < 26; j++) {
@@ -36,7 +36,7 @@ int Play_Process(SDL_Texture* texture_play, SDL_Renderer* rend) {
     SDL_RenderClear(rend);
     SDL_RenderCopy(rend, texture_play, NULL, NULL);
     ApplySurface(20, 20, 200, 225, t_gallows[proc_l], rend);
-    Draw_Word(&word, rend);
+    Draw_Word(&word, rend, 1);
     SDL_RenderPresent(rend);
     SDL_Delay(1000 / 60);
     while (!close_requested) {
@@ -44,6 +44,7 @@ int Play_Process(SDL_Texture* texture_play, SDL_Renderer* rend) {
         check_win = Check_Win(word.size, word.check);
         if (check_win == 1) {
             SDL_Delay(1000 / 60);
+            free(t_gallows);
             return 0;
         }
         if (SDL_PollEvent(&event)) {
@@ -54,6 +55,7 @@ int Play_Process(SDL_Texture* texture_play, SDL_Renderer* rend) {
             case SDL_KEYDOWN:
                 if (event.key.keysym.scancode == SDL_SCANCODE_ESCAPE) {
                     close_requested = 1;
+                    free(t_gallows);
                     return 1;
                 }
                 if (event.key.keysym.scancode >= SDL_SCANCODE_A
@@ -74,13 +76,14 @@ int Play_Process(SDL_Texture* texture_play, SDL_Renderer* rend) {
                             SDL_RenderPresent(rend);
                             SDL_Delay(1000 / 60);
                             if (proc_l == 6) {
-                                Draw_Word(&word, rend);
+                                Draw_Word(&word, rend, 0);
                                 SDL_Delay(1000 / 60);
+                                free(t_gallows);
                                 return 2;
                             }
                             break;
                         } else if (k > 0) {
-                            Draw_Word(&word, rend);
+                            Draw_Word(&word, rend, 1);
                             SDL_RenderPresent(rend);
                             SDL_Delay(1000 / 60);
                         }
@@ -89,6 +92,7 @@ int Play_Process(SDL_Texture* texture_play, SDL_Renderer* rend) {
                                 "Alphavit NULL %s %d\n",
                                 __FILE__,
                                 __LINE__);
+                        free(t_gallows);
                         return -1;
                     } else {
                         break;
@@ -99,6 +103,7 @@ int Play_Process(SDL_Texture* texture_play, SDL_Renderer* rend) {
             }
         }
     }
+    free(t_gallows);
     return 0;
 }
 
@@ -183,7 +188,7 @@ int Check_Win(unsigned int size, int* check) {
     return 1;
 }
 
-void Draw_Word(word_t* word, SDL_Renderer* rend) {
+void Draw_Word(word_t* word, SDL_Renderer* rend, int c) {
     SDL_Surface** eng_lit = (SDL_Surface**)malloc(sizeof(SDL_Surface*) * 26);
     SDL_Texture** t_eng = (SDL_Texture**)malloc(sizeof(SDL_Texture*) * 26);
 
@@ -196,12 +201,26 @@ void Draw_Word(word_t* word, SDL_Renderer* rend) {
     SDL_FreeSurface(*eng_lit);
     SDL_Surface* clear = IMG_Load("./draw/clear1.bmp");
     t_eng[26] = SDL_CreateTextureFromSurface(rend, clear);
-    SDL_FreeSurface(clear);
+    free(clear);
     unsigned int i = 0;
-    while (i < word->size) {
-        ApplySurface(
-                (i * 40) + 260, 50, 40, 50, t_eng[word->check[i] - 1], rend);
-        i++;
+    if (c == 0) {
+        while (i < word->size) {
+            Word_to_Int(&word->size, word->str, word->string, word->check);
+            ApplySurface(
+                    (i * 40) + 260, 50, 40, 50, t_eng[word->str[i] - 1], rend);
+            i++;
+        }
+    } else {
+        while (i < word->size) {
+            ApplySurface(
+                    (i * 40) + 260,
+                    50,
+                    40,
+                    50,
+                    t_eng[word->check[i] - 1],
+                    rend);
+            i++;
+        }
     }
 }
 
